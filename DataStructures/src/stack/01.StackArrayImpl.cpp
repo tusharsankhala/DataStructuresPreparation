@@ -11,7 +11,7 @@ class StackArray
 public:
 	explicit StackArray(size_t s) 
 	{
-		size = s;
+		size = s > 2 ? s : 2;
 		data = new T[size];
 	}
 
@@ -23,9 +23,9 @@ public:
 	// Operations on Stack.
 	bool Push(T val)
 	{
-		if (top == size)
+		if (top == size - 1)
 		{
-			std::cout << "Stack is Full, Can't add elements" << '\n';
+			std::cout << "Stack Overflow, Can't add elements" << '\n';
 			return false;
 		}
 
@@ -50,13 +50,15 @@ public:
 
 	T Peek(size_t index)
 	{
-		if (index >= size)
+		if (index > size - 1) && (index < 0)
 		{
 			std::cout << "Index is greater then size" << '\n';
 			return -1;
 		}
 
-		return data[index];
+		T num = data[top - (index - 1)];
+		
+		return num;
 	}
 
 	bool IsFull()
@@ -74,24 +76,26 @@ public:
 	{
 		if (top < 0)
 		{
-			std::cout << "Stack is Empty" << '\n';
+			std::cout << "Stack Underflow, It's Empty" << '\n';
 			return true;
 		}
 
 		return false;
 	}
 
-	void Print()
+	void Display()
 	{
 		std::cout << "Stack:";
-		for (int i=0; i <= top; ++i)
+		for (int i=top; i >= 0; --i)
 		{
 			std::cout << " " << data[i];
 		}
+
+		std::cout << '\n';
 	}
 
 private:
-	size_t size;
+	size_t size = 0;
 	int top = -1;
 	T* data = nullptr;
 };
@@ -106,13 +110,15 @@ int main()
 	stackArray.Push(40);
 	stackArray.Push(50);
 	
-	stackArray.Print();
+	stackArray.Display();
 	stackArray.Push(60);
 	stackArray.IsFull();
 
+	std::cout<< "Element at 2 index of stack: " << stackArray.Peek(2) <<'\n';
 
 	stackArray.Pop();
-	stackArray.Print();
+	std::cout << "Element at 3 index of stack: " << stackArray.Peek(3) << '\n';
+	stackArray.Display();
 
 	stackArray.Pop();
 	stackArray.Pop();
